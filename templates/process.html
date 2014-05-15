@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="name">{{ name }}</div>
+<dl>
+<div>{{ street }}</div>
+<div>{{city}}</div>
+<div>{{zip_code}}</div>
+<div><a href="http://{{internet_address}}" targe="_new">{{internet_address}}</a></div>
+</dl>
+<form method="post" enctype="multipart/form-data" >
+<input type="text" name="taxnr" placeholder="Tax Number">
+<input type="text" name="orgid" placeholder="Org ID">
+<input type="submit" value="submit" name="submit" class="pure-button
+pure-button-primary" />
+</form>
+{% endblock %}
