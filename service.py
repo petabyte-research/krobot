@@ -42,9 +42,7 @@ class process:
             return t.render({"id":id})
         
         t=e.get_template('process.html')
-        workon = el[0]
         dd = dict(((i.tag, i.text) for i in el[0].getchildren()))
-
         return t.render(dd)
     
     def POST(self,id):
