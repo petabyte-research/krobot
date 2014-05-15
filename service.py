@@ -81,6 +81,7 @@ class download:
             raise web.seeother('/')
 
         web.header('Content-Type', 'application/xml')
+        web.header('Content-disposition', 'attachment; filename=%s.xml'%id)
         return lxml.etree.tostring(data[id])
 
 
