@@ -1,16 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="name">{{ name }}</div>
+<div class="name"><strong>{{ name }}</strong></div>
 <dl>
-<div>{{ street }}</div>
-<div>{{city}}</div>
-<div>{{zip_code}}</div>
-<div><a href="http://{{internet_address}}" targe="_new">{{internet_address}}</a></div>
-</dl>
+<dt>Street</dt>
+<dd>{{ street }}</dd>
+<dt>City</dt>
+<dd>{{city}}</dd>
+<dt>ZIP</dt>
+<dd>{{zip_code}}</dd>
+{% if internet_address %}
+<dt>Internet Address</dt>
+<dd><a href="http://{{internet_address}}" targe="_new">{{internet_address}}</a></dd>
+{% endif %}
 <form method="post" enctype="multipart/form-data" >
+<dt>Tax ID</dt>
+<dd>
 <input type="text" name="taxnr" placeholder="Tax Number">
-<input type="text" name="orgid" placeholder="Org ID">
+</dd>
+<dt>Org ID</dt>
+<dd>
+<input type="text" name="orgid" placeholder="Org ID"></dd>
+</dl>
 <input type="submit" value="submit" name="submit" class="pure-button
 pure-button-primary" />
 </form>
