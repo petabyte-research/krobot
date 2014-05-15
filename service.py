@@ -24,7 +24,11 @@ class index:
         x = web.input(file={})
         content = x['file'].file.read()
         h = hashlib.md5(content).hexdigest()
-        data[h]=lxml.etree.fromstring(content)
+        try:
+            data[h]=lxml.etree.fromstring(content)
+        except lxml.etree.XMLSyntaxError as ex:
+            t=e.get_template("index.html")
+            return t.render({"error": """Error Parsing XML: %s"""%ex})
         raise web.seeother('/file/%s'%h)
 
 class process:
