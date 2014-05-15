@@ -34,11 +34,9 @@ class index:
 class process:
     """ process an  id """
     def GET(self, id):
-        d = data.get(id,None)
-        if not d:
-            raise web.seeother('/')
-        
         el = self.get_elements(id)
+
+        """ redirect to done if no more elements to work on """
         if len(el) == 0:
             t=e.get_template('done.html')
             return t.render({"id":id})
@@ -51,22 +49,26 @@ class process:
     
     def POST(self,id):
         x = web.input()
-        d = data.get(id,None)
-        if not d:
-            raise web.seeother('/')
-        
         el = self.get_elements(id)
+        
+        """ add tax_nr """
         ae=lxml.etree.Element('tax_nr')
         ae.text=x['taxnr']
         el[0].append(ae)
+
+        """ if the orgid is defined add it """
         if x['orgid']!='':
             ae=lxml.etree.Element('org_id')
             ae.text=x['orgid']
             el[0].append(ae)
+        
+        """ return the next element """
         return self.GET(id)
 
     def get_elements(self,id):
+        """ get the elements to work on """
         d = data.get(id,None)
+        """ redirect to index if data is not there """
         if not d:
             raise web.seeother('/')
         
@@ -77,6 +79,7 @@ class process:
 class download:
     def GET(self,id):
         d = data.get(id,None)
+        """ redirect to index if data is not there """
         if not d:
             raise web.seeother('/')
 
