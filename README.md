@@ -5,6 +5,9 @@
 A small web application to perform some of the data cleaning done by
 K-Monitor when they import new data.
 
+If you want to see it in action (not much to see there) Krobot lives on
+http://krobot.herokuapp.com
+
 ## Contributing
 
 You can make KRobot better:
