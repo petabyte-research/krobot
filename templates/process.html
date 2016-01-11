@@ -1,28 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="name"><strong>{{ name }}</strong></div>
-<dl>
-<dt>Street</dt>
-<dd>{{ street }}</dd>
-<dt>City</dt>
-<dd>{{city}}</dd>
-<dt>ZIP</dt>
-<dd>{{zip_code}}</dd>
-{% if internet_address %}
-<dt>Internet Address</dt>
-<dd><a href="http://{{internet_address}}" targe="_new">{{internet_address}}</a></dd>
-{% endif %}
 <form method="post" enctype="multipart/form-data" >
-<dt>Tax ID</dt>
-<dd>
-<input type="text" name="taxnr" placeholder="Tax Number">
-</dd>
-<dt>Org ID</dt>
-<dd>
-<input type="text" name="orgid" placeholder="Org ID"></dd>
-</dl>
-<input type="submit" value="submit" name="submit" class="pure-button
-pure-button-primary" />
+	<div class="name"><strong>
+		{% if palyazo %}	{# nfu: tender #}
+			{{palyazo}}
+		{% else %}			{# kozbesz: buyer / seller #}
+			{{name}}
+		{% endif %}
+	</strong></div>
+	<dl>
+		{% if zip_code %}
+			<dt>ZIP</dt>
+			<dd>{{zip_code}}</dd>
+		{% endif %}
+
+		{% if street %}
+			<dt>Street</dt>
+			<dd>{{ street }}</dd>
+		{% endif %}
+
+		{% if city %}
+			<dt>City</dt>
+			<dd>{{city}}</dd>
+		{% endif %}
+
+		{% if county %}
+			<dt>County</dt>
+			<dd>{{county}}</dd>
+		{% endif %}
+
+		{% if region %}
+			<dt>Region</dt>
+			<dd>{{region}}</dd>
+		{% endif %}
+
+		{% if internet_address %}
+			<dt>Internet Address</dt>
+			<dd><a href="http://{{internet_address}}" targe="_new">{{internet_address}}</a></dd>
+		{% endif %}
+
+		<dt>Tax number</dt>
+		<dd><input type="text" name="taxnr" placeholder="Tax Number"></dd>
+
+		<dt>Org ID</dt>
+		<dd><input type="text" name="orgid" placeholder="Org ID"></dd>
+	</dl>
+	<input type="submit" value="submit" name="submit" class="pure-button
+	pure-button-primary" />
 </form>
 {% endblock %}

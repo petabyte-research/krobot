@@ -3,10 +3,11 @@ import hashlib
 import web
 import lxml.etree
 import jinja2
+import re
 
 e=jinja2.Environment(loader=jinja2.FileSystemLoader('templates'));
 
-urls= ( 
+urls= (
     '/', 'index',
     '/file/(.+)', 'process',
     '/download/(.+)', 'download',
@@ -24,6 +25,7 @@ class index:
         x = web.input(file={})
         content = x['file'].file.read()
         h = hashlib.md5(content).hexdigest()
+        h = x['file'].filename.split('/')[-1] + '::' + h
         try:
             data[h]=lxml.etree.fromstring(content)
         except lxml.etree.XMLSyntaxError as ex:
@@ -40,26 +42,27 @@ class process:
         if len(el) == 0:
             t=e.get_template('done.html')
             return t.render({"id":id})
-        
+
         t=e.get_template('process.html')
         dd = dict(((i.tag, i.text) for i in el[0].getchildren()))
         return t.render(dd)
-    
+
     def POST(self,id):
         x = web.input()
         el = self.get_elements(id)
-        
-        """ add tax_nr """
-        ae=lxml.etree.Element('tax_nr')
-        ae.text=x['taxnr']
-        el[0].append(ae)
+
+        """ if taxnr is defined well add it """
+        if re.match("[0-9\\-]{8,}", x['taxnr']):
+            ae=lxml.etree.Element('tax_nr')
+            ae.text=x['taxnr']
+            el[0].append(ae)
 
         """ if the orgid is defined add it """
-        if x['orgid']!='':
+        if re.match("\\d+", x['orgid']):
             ae=lxml.etree.Element('org_id')
             ae.text=x['orgid']
             el[0].append(ae)
-        
+
         """ return the next element """
         return self.GET(id)
 
@@ -69,10 +72,12 @@ class process:
         """ redirect to index if data is not there """
         if not d:
             raise web.seeother('/')
-        
-        return d.xpath("//buyer[not(org_id) and not(tax_nr)]") + d.xpath(
-            "//seller[not(org_id) and not(tax_nr)]")
-        
+
+        return d.xpath(
+            "//buyer[not(org_id) and not(tax_nr)]") + d.xpath(
+            "//seller[not(org_id) and not(tax_nr)]") + d.xpath(
+            "//tender[not(org_id) and not(tax_nr)]")
+
 
 class download:
     def GET(self,id):
@@ -82,7 +87,7 @@ class download:
             raise web.seeother('/')
 
         web.header('Content-Type', 'application/xml')
-        web.header('Content-disposition', 'attachment; filename=%s.xml'%id)
+        web.header('Content-disposition', 'attachment; filename=%s'%id.split("::")[0])
         return lxml.etree.tostring(data[id])
 
 
