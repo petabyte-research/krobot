@@ -1,6 +1,12 @@
 {% extends "base.html" %}
+
 {% block content %}
-Kongratulations! you're done, now go eat Kookies.
-<a href="/download/{{id}}" class="pure-button
-pure-button-primary">Download</a>
+	<article>
+		<h2 class="text-center">Kongratulations! you're done, now go eat Kookies. :)</h2>
+		<p class="text-center"><a href="/download/{{id}}" class="btn btn-success">
+			<span class="glyphicon glyphicon-cloud-download"></span>
+			Download ({{filename}})
+		</a></p>
+		<p class="text-center">You can go back to <a href="/">the front</a> and edit another XML.</p>
+	</article>
 {% endblock %}
